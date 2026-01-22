@@ -1,54 +1,65 @@
-# Knowledge Graph Management Scripts
+# Knowledge Graph API Examples
 
-This collection of Python scripts manages a Neo4j knowledge graph for organizational data, including employees, positions, departments, and RBAC groups.
+Simple Python scripts demonstrating how to interact with the Airia Knowledge Graph API.
 
-## Graph Identification Scripts
+## Why Knowledge Graphs?
 
-These scripts help you identify and verify your knowledge graph:
+Knowledge graphs are ideal for storing and querying relationship-based data using nodes and edges. They excel at traversing connections and finding patterns across complex networks, from social graphs and recommendation systems to access control (like our RBAC demo) and organisational hierarchies.
 
-### `prd_findGraphs.py`
-Lists all available graphs in your Airia account. Use this to find your graph ID.
+## Setup
 
-### `prd_graphStats.py`
-Returns node count statistics for the specified graph. Useful for verifying data has been loaded.
+Install required dependencies:
+```bash
+pip install requests openpyxl
+```
 
-## Data Population Scripts
+> **Note:** `openpyxl` is only needed for the demo scripts that work with Excel files
 
-These scripts populate the knowledge graph with organizational data from CSV files:
+Update the placeholder values in each script:
+- `YOUR_API_KEY_HERE`
+- `YOUR_GRAPH_ID_HERE`
+- `YOUR_PROJECT_ID_HERE`
 
-### `prd_findEmployees.py`
-Reads `output.csv` and generates a Cypher query to create:
-- Employee nodes (by user code)
-- Position nodes and relationships
-- Manager position relationships
-- Department nodes and relationships
+## Basic API Scripts
 
-### `prd_findGroups.py`
-Scans `output.csv` for all unique group names and generates a query to create RBACGroup nodes.
+| Script | Description |
+|--------|-------------|
+| `create_graph.py` | Create a new project graph |
+| `get_graph.py` | Retrieve graph information |
+| `get_nodes.py` | Get node count in a graph |
+| `clear_graph.py` | Delete all nodes and relationships |
+| `add_data.py` | Execute custom Cypher queries against the graph |
 
-### `prd_populateGroups.py`
-Reads `input.csv` and creates PART_OF relationships between employees and their RBAC groups. Includes retry logic and processes up to 4000 rows.
+## Employee RBAC Demo
 
-### `prd_cypher.py`
-Utility module that executes Cypher queries against the Airia API. Used by all population scripts.
+A complete example showing how to model employee access control in a knowledge graph.
 
-### `prd_main.py`
-Orchestration script with three main functions:
-- `addEmployees()` - Populate employee data
-- `addGroups()` - Create RBAC groups
-- `addRelationships()` - Link employees to groups
+### Step 1: Generate Demo Data
+```bash
+python demo_create_data.py
+```
+Creates `employee_rbac_demo.xlsx` with:
+- 50 employees across 10 departments
+- 100 RBAC groups
+- ~2,000 group memberships (avg 40 groups per employee)
 
-## Workflow
+### Step 2: Load into Graph
+```bash
+python demo_populate_graph.py
+```
+Populates your knowledge graph with:
+- Employee nodes with personal details
+- Department nodes
+- RBAC group nodes
+- Relationships: `WORKS_IN` and `MEMBER_OF`
 
-1. Run `prd_findGraphs.py` to identify your graph
-2. Uncomment and run `addEmployees()` in `prd_main.py`
-3. Uncomment and run `addGroups()` in `prd_main.py`
-4. Uncomment and run `addRelationships()` in `prd_main.py`
-5. Use `prd_graphStats.py` to verify data was loaded
+## Graph Schema
 
-## Requirements
+```
+(Employee)-[:WORKS_IN]->(Department)
+(Employee)-[:MEMBER_OF]->(RBACGroup)
+```
 
-- Python 3.x
-- `requests` library
-- CSV files: `output.csv` and `input.csv`
-- Valid Airia API key (replace `akey-placeholder` in scripts)
+## API Endpoint
+
+All scripts use: `https://prodaus.api.airia.ai/v1/ProjectGraph`
