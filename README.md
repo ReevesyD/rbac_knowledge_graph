@@ -4,7 +4,17 @@ Simple Python scripts demonstrating how to interact with the Airia Knowledge Gra
 
 ## Why Knowledge Graphs?
 
-Knowledge graphs are ideal for storing and querying relationship-based data using nodes and edges. They excel at traversing connections and finding patterns across complex networks, from social graphs and recommendation systems to access control (like our RBAC demo) and organisational hierarchies.
+Knowledge graphs are ideal for storing and querying relationship-based data using nodes and edges. They excel at traversing connections and finding patterns across complex networks.
+
+**Common use cases:**
+- **Social networks** - model friendships, posts, likes, memberships
+- **Supply chain** - track products, suppliers, warehouses, shipments
+- **Healthcare** - connect genes, proteins, diseases, treatments
+- **Fraud detection** - analyse account relationships and transaction patterns
+- **Recommendations** - link users, products, purchases, reviews
+- **Access control** - manage employees, roles, permissions (like our RBAC demo)
+- **IoT systems** - map sensors, devices, locations, connections
+- **Research** - connect authors, papers, citations, institutions
 
 ## Setup
 
